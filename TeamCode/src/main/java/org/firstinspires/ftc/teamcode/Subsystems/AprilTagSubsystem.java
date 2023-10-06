@@ -1,5 +1,6 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Subsystems;
 
+import java.util.List;
 import android.util.Size;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -7,11 +8,14 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 public class AprilTagSubsystem {
     private AprilTagProcessor aprilTagProcessor;
     private VisionPortal visionPortal;
+    private List<AprilTagDetection> currentDetections;
+    private int desiredID;
 
     public AprilTagSubsystem(OpMode opMode, Telemetry telemetry) {
 
@@ -34,6 +38,39 @@ public class AprilTagSubsystem {
         builder.addProcessor(aprilTagProcessor);
 
         visionPortal = builder.build();
+    }
+
+    public void setDesiredAprilTag(int id) {
+        desiredID = id;
+    }
+
+    public AprilTagDetection getAprilTag() {
+        for (AprilTagDetection detection : currentDetections) {
+            if (detection.id == desiredID) {
+                return detection;
+            }
+        }
+        return null;
+    }
+
+    public double getXOffset() {
+        return getAprilTag().ftcPose.x;
+    }
+
+    public double getYOffset() {
+        return getAprilTag().ftcPose.y;
+    }
+
+    public double getZOffset() {
+        return getAprilTag().ftcPose.z;
+    }
+
+    public void updateDetection() {
+        currentDetections = aprilTagProcessor.getDetections();
+    }
+
+    public void periodic() {
+        updateDetection();
     }
 
 

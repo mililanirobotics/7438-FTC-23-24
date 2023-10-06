@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.Constants.MecanumConstants;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
+
 public class MecanumSubsystem {
     //drive motors
     private final DcMotor leftFront;
@@ -91,6 +92,13 @@ public class MecanumSubsystem {
         telemetry.addData("Robot Heading: ", heading);
         telemetry.addData("Y-axis", rotY);
         telemetry.update();
+    }
+
+    public void setPower(double leftPower, double rightPower) {
+        leftFront.setPower(leftPower);
+        leftBack.setPower(leftPower);
+        rightFront.setPower(rightPower);
+        rightBack.setPower(rightPower);
     }
 
     public void shutdown() {
