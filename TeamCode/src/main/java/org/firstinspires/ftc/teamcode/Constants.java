@@ -23,4 +23,16 @@ public final class Constants {
     public static class VisionSubsystem {
 
     }
+
+    public static class IntakeConstants {
+        public static DcMotorSimple.Direction intake = DcMotorSimple.Direction.FORWARD;
+
+        public static double servoIntakePosition = 0;
+        public static double servoDeliverPosition = 0;
+    }
+
+    public static class CascadeConstants {
+        public static DcMotorSimple.Direction leftLift = DcMotorSimple.Direction.FORWARD;
+        public static DcMotorSimple.Direction rightLift = DcMotorSimple.Direction.REVERSE;
+    }
 }

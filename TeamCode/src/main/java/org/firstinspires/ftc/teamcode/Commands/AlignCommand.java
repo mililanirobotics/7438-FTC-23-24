@@ -3,12 +3,12 @@ package org.firstinspires.ftc.teamcode.Commands;
 import java.math.*;
 
 import org.firstinspires.ftc.teamcode.Constants;
-import org.firstinspires.ftc.teamcode.Commands.CommandTemplate;
+import org.firstinspires.ftc.teamcode.Commands.CommandBase;
 import org.firstinspires.ftc.teamcode.Subsystems.MecanumSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.AprilTagSubsystem;
 import org.firstinspires.ftc.teamcode.PIDController;
 
-public class AlignCommand extends CommandTemplate {
+public class AlignCommand implements CommandBase {
     private MecanumSubsystem s_MecanumSubsystem;
     private AprilTagSubsystem s_AprilTagSubsystem;
     private PIDController alignPID;
@@ -39,7 +39,7 @@ public class AlignCommand extends CommandTemplate {
     }
 
     @Override
-    public boolean finished() {
+    public boolean isFinished() {
         return Math.abs(s_AprilTagSubsystem.getXOffset()) < 1;
     }
 }

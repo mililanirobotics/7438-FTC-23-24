@@ -60,17 +60,14 @@ public class MecanumSubsystem {
 
         double heading = imu.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.RADIANS).thirdAngle;
 
-//        double rotX = x * Math.cos(-heading) - y * Math.sin(-heading);
-//        double rotY = x * Math.cos(-heading) + y * Math.sin(-heading);
-//        double denominator = Math.max(Math.abs(rotX) + Math.abs(rotY) + Math.abs(theta), 1);
-
         double rotX = x * Math.cos(-heading) - y * Math.sin(-heading);
         double rotY = x * Math.sin(-heading) + y * Math.cos(-heading);
+        double denominator = Math.max(Math.abs(rotX) + Math.abs(rotY) + Math.abs(theta), 1);
 
-        double leftFrontPower = (rotY - rotX - theta);// / denominator;
-        double leftBackPower = (rotY + rotX - theta);// / denominator;
-        double rightFrontPower = (rotY + rotX + theta);// / denominator;
-        double rightBackPower = (rotY - rotX + theta);// / denominator;
+        double leftFrontPower = (rotY - rotX - theta) / denominator;
+        double leftBackPower = (rotY + rotX - theta) / denominator;
+        double rightFrontPower = (rotY + rotX + theta) / denominator;
+        double rightBackPower = (rotY - rotX + theta) / denominator;
 
         if(gamepad.right_trigger >= MecanumConstants.slowModeTrigger) {
             leftFront.setPower(leftFrontPower * MecanumConstants.slowModeScaler);
