@@ -2,10 +2,6 @@ package org.firstinspires.ftc.teamcode.Commands;
 
 public interface CommandBase {
 
-    default CommandBase addRequirement() {
-        return this;
-    }
-
     default void initialize() {}
 
     default void execute() {}
