@@ -22,18 +22,16 @@ public class TestTeleOp extends OpMode
      */
     public void init() {
         mecanumSubsystem = new MecanumSubsystem(this, telemetry);
-        new DriveCommand(gamepad1, mecanumSubsystem)
-                .run();
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
+        mecanumSubsystem.setDefaultCommand(new DriveCommand(gamepad1, mecanumSubsystem));
     }
 
     /*
      * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
      */
     public void loop() {
-        driveCommand.run();
     }
 
     /*

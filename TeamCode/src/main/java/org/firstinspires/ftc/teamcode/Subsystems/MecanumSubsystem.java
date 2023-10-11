@@ -6,13 +6,14 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.teamcode.Commands.CommandBase;
 import org.firstinspires.ftc.teamcode.Constants.MecanumConstants;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-public class MecanumSubsystem {
+public class MecanumSubsystem implements SubsystemBase {
     //drive motors
     private final DcMotor leftFront;
     private final DcMotor leftBack;
@@ -98,10 +99,14 @@ public class MecanumSubsystem {
         rightBack.setPower(rightPower);
     }
 
+    @Override
     public void shutdown() {
         leftFront.setPower(0);
         leftBack.setPower(0);
         rightFront.setPower(0);
         rightBack.setPower(0);
     }
+
+    @Override
+    public void periodic() {}
 }
