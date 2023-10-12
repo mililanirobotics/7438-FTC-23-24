@@ -16,9 +16,9 @@ public interface CommandBase {
 
     default void run() {
         initialize();
-        do {
+        if (!isFinished()) {
             execute();
-        } while (!isFinished());
+        }
 //        end(false);
     }
 }

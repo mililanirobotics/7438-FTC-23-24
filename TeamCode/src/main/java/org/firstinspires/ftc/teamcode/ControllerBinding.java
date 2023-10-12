@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.checkerframework.checker.units.qual.C;
+import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.ControllerAddons;
 import org.firstinspires.ftc.teamcode.Commands.CommandBase;
 
@@ -11,6 +11,7 @@ public class ControllerBinding extends Thread {
     private ControllerAddons controllerAddons;
     private Gamepad gamepad;
     private int bindedKey;
+    private double triggerTolerance;
 
     public ControllerBinding(Gamepad gamepad, int bindedKey) {
         this.gamepad = gamepad;
@@ -19,13 +20,18 @@ public class ControllerBinding extends Thread {
         controllerAddons = new ControllerAddons();
     }
 
+    public void setTriggerTolerance(double triggerTolerance) {
+        this.triggerTolerance = triggerTolerance;
+    }
+
     public void onTrue(CommandBase command) {
         this.command = command;
     }
 
     @Override
     public void run() {
-        if (controllerAddons.get(gamepad, bindedKey)) {
+        if (controllerAddons.getButton(gamepad, bindedKey) ||
+                controllerAddons.getTrigger(gamepad, bindedKey) > triggerTolerance) {
             command.run();
         }
     }

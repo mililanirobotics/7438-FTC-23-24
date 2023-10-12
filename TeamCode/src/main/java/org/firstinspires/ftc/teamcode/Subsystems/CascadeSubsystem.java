@@ -5,7 +5,7 @@ import org.firstinspires.ftc.teamcode.Constants;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-public class CascadeSubsystem {
+public class CascadeSubsystem implements SubsystemBase{
     private DcMotor leftLift;
     private DcMotor rightLift;
 
@@ -24,5 +24,18 @@ public class CascadeSubsystem {
         leftLift.setPower(power);
         rightLift.setPower(power);
     }
+
+    public double getLiftPosition() {
+        return leftLift.getCurrentPosition()/Constants.CascadeConstants.ticksPerRev;
+    }
+
+    @Override
+    public void shutdown() {
+        leftLift.setPower(0);
+        rightLift.setPower(0);
+    }
+
+    @Override
+    public void periodic() {}
 
 }

@@ -11,7 +11,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.VisionPortal;
 
-public class AprilTagSubsystem {
+public class AprilTagSubsystem implements SubsystemBase {
     private AprilTagProcessor aprilTagProcessor;
     private VisionPortal visionPortal;
     private List<AprilTagDetection> currentDetections;
@@ -69,9 +69,9 @@ public class AprilTagSubsystem {
         currentDetections = aprilTagProcessor.getDetections();
     }
 
-    public void periodic() {
-        updateDetection();
-    }
+    @Override
+    public void shutdown() {}
 
-
+    @Override
+    public void periodic() {updateDetection();}
 }

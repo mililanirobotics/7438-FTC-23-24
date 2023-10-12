@@ -8,29 +8,12 @@ public class PIDController {
     private double error;
     private double previousError;
 
-    public PIDController setProportional(double kP) {
+    public PIDController(double kP, double kI, double kD, double kFF, double kIL) {
         this.kP = kP;
-        return this;
-    }
-
-    public PIDController setIntegral(double kI) {
         this.kI = kI;
-        return this;
-    }
-
-    public PIDController setDerivative(double kD) {
         this.kD = kD;
-        return this;
-    }
-
-    public PIDController setFeedForward(double kFF) {
         this.kFF = kFF;
-        return this;
-    }
-
-    public PIDController setIntegralLimiter(double kIL) {
         this.kIL = kIL;
-        return this;
     }
 
     public void createSetPoint(double setPoint) {
@@ -41,6 +24,10 @@ public class PIDController {
 
     public void setProcessVariable(double processVariable) {
         processVariable = this.processVariable;
+    }
+
+    public double getError() {
+        return setPoint - processVariable;
     }
 
     public double getOutput() {

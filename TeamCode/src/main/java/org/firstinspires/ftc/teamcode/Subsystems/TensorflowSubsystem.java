@@ -11,7 +11,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
-public class TensorflowSubsystem {
+public class TensorflowSubsystem implements SubsystemBase {
     private TfodProcessor tfod;
     private VisionPortal visionPortal;
     private List<Recognition> currentRecognitions;
@@ -72,7 +72,9 @@ public class TensorflowSubsystem {
         currentRecognitions = tfod.getRecognitions();
     }
 
-    public void periodic() {
-        updateRecognition();
-    }
+    @Override
+    public void shutdown() {}
+
+    @Override
+    public void periodic() {updateRecognition();}
 }

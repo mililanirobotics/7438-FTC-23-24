@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Commands;
 
 import java.math.*;
 
+import org.checkerframework.checker.units.qual.C;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.Commands.CommandBase;
 import org.firstinspires.ftc.teamcode.Subsystems.MecanumSubsystem;
@@ -18,12 +19,12 @@ public class AlignCommand implements CommandBase {
         s_MecanumSubsystem = this.s_MecanumSubsystem;
         s_AprilTagSubsystem = this.s_AprilTagSubsystem;
 
-        alignPID = new PIDController()
-                .setProportional(Constants.MecanumConstants.kPController)
-                .setIntegral(Constants.MecanumConstants.kIController)
-                .setDerivative(Constants.MecanumConstants.kDController)
-                .setFeedForward(Constants.MecanumConstants.kFFController)
-                .setIntegralLimiter(Constants.MecanumConstants.kILController);
+        alignPID = new PIDController(
+                Constants.MecanumConstants.kPController,
+                Constants.MecanumConstants.kIController,
+                Constants.MecanumConstants.kDController,
+                Constants.MecanumConstants.kFFController,
+                Constants.MecanumConstants.kILController);
     }
 
     @Override
