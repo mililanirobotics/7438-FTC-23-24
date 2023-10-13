@@ -6,25 +6,23 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Commands.DriveCommand;
 import org.firstinspires.ftc.teamcode.Subsystems.CascadeSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.MecanumSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.AprilTagSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.TensorflowSubsystem;
-import org.firstinspires.ftc.teamcode.PIDController;
+import org.firstinspires.ftc.teamcode.CommandScheduler;
 import org.firstinspires.ftc.teamcode.Commands.Cascade.*;
 import org.firstinspires.ftc.teamcode.ControllerBinding;
 
 import org.firstinspires.ftc.teamcode.Constants.OperatorConstants;
-
-import java.util.HashMap;
 
 public class RobotContainer {
     private OpMode opMode;
     private Telemetry telemetry;
     private ControllerAddons controllerAddons;
     private Gamepad gamepad;
-    private HardwareMap hwMap;
 
     private MecanumSubsystem mecanumSubsystem;
     private CascadeSubsystem cascadeSubsystem;
@@ -32,11 +30,12 @@ public class RobotContainer {
     private AprilTagSubsystem aprilTagSubsystem;
     private TensorflowSubsystem tensorflowSubsystem;
 
+    private CommandScheduler scheduler;
+
     public RobotContainer(OpMode opMode, Telemetry telemetry) {
         this.opMode = opMode;
         this.telemetry = telemetry;
         gamepad = opMode.gamepad1;
-        hwMap = opMode.hardwareMap;
 
         mecanumSubsystem = new MecanumSubsystem(opMode, telemetry);
         cascadeSubsystem = new CascadeSubsystem(opMode);
@@ -45,28 +44,29 @@ public class RobotContainer {
         tensorflowSubsystem = new TensorflowSubsystem(opMode, telemetry);
         controllerAddons = new ControllerAddons();
 
+        scheduler = new CommandScheduler()
+                .addSubsystem(mecanumSubsystem)
+                .addSubsystem(cascadeSubsystem)
+                .addSubsystem(intakeSubsystem)
+                .addSubsystem(aprilTagSubsystem)
+                .addSubsystem(tensorflowSubsystem);
+
+        mecanumSubsystem.setDefaultCommand(new DriveCommand(gamepad, mecanumSubsystem));
+
         telemetry.addData("Status", "Initialized");
         telemetry.update();
     }
 
     public void configureButtonBindings() {
-        new ControllerBinding(gamepad, OperatorConstants.kLEFTBUMPER)
-                .onTrue(new LiftAscensionCommand(gamepad, cascadeSubsystem));
+//        new ControllerBinding(gamepad, OperatorConstants.kLEFTBUMPER, scheduler)
+//                .onTrue(new LiftAscensionCommand(gamepad, cascadeSubsystem));
     }
 
     public void shutdown() {
-        mecanumSubsystem.shutdown();
-        cascadeSubsystem.shutdown();
-        intakeSubsystem.shutdown();
-        aprilTagSubsystem.shutdown();
-        tensorflowSubsystem.shutdown();
+        scheduler.shutdown();
     }
 
     public void run() {
-        mecanumSubsystem.run();
-        cascadeSubsystem.run();
-        intakeSubsystem.run();
-        aprilTagSubsystem.run();
-        tensorflowSubsystem.run();
+        scheduler.run();
     }
 }

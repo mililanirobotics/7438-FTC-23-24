@@ -5,34 +5,35 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.ControllerAddons;
 import org.firstinspires.ftc.teamcode.Commands.CommandBase;
+import org.firstinspires.ftc.teamcode.CommandScheduler;
 
-public class ControllerBinding extends Thread {
-    private CommandBase command;
+public class ControllerBinding {
+    private CommandScheduler commandScheduler;
     private ControllerAddons controllerAddons;
     private Gamepad gamepad;
     private int bindedKey;
     private double triggerTolerance;
 
-    public ControllerBinding(Gamepad gamepad, int bindedKey) {
+    public ControllerBinding(Gamepad gamepad, int bindedKey, CommandScheduler commandScheduler) {
         this.gamepad = gamepad;
         this.bindedKey = bindedKey;
+        this.commandScheduler = commandScheduler;
 
         controllerAddons = new ControllerAddons();
     }
 
-    public void setTriggerTolerance(double triggerTolerance) {
+    public ControllerBinding setTriggerTolerance(double triggerTolerance) {
         this.triggerTolerance = triggerTolerance;
+        return this;
+    }
+
+    public boolean checkBinding() {
+        return controllerAddons.getButton(gamepad, bindedKey) || controllerAddons.getTrigger(gamepad, bindedKey) > triggerTolerance;
     }
 
     public void onTrue(CommandBase command) {
-        this.command = command;
-    }
-
-    @Override
-    public void run() {
-        if (controllerAddons.getButton(gamepad, bindedKey) ||
-                controllerAddons.getTrigger(gamepad, bindedKey) > triggerTolerance) {
-            command.run();
+        if (checkBinding()) {
+            commandScheduler.addCommand(command);
         }
     }
 }

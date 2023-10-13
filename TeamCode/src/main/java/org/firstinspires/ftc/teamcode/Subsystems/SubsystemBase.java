@@ -10,14 +10,12 @@ public interface SubsystemBase {
         defaultCommands.add(defaultCommand);
     }
 
+    default List<CommandBase> getDefaultCommand() {
+        return defaultCommands;
+    }
+
     default void periodic() {}
 
     default void shutdown() {}
 
-    default void run() {
-        for (CommandBase command : defaultCommands) {
-            command.run();
-        }
-        periodic();
-    }
 }

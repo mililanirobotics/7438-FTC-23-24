@@ -23,9 +23,7 @@ public class TestTeleOp extends OpMode
     /*
      * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
      */
-    public void loop() {
-        robotContainer.run();
-    }
+    public void loop() { robotContainer.run(); }
 
     /*
      * Code to run ONCE after the driver hits STOP
