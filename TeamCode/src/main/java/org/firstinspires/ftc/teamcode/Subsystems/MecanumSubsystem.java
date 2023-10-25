@@ -6,11 +6,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.teamcode.Commands.CommandBase;
 import org.firstinspires.ftc.teamcode.Constants.MecanumConstants;
+import org.firstinspires.ftc.teamcode.aSClib.SubsystemBase;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 public class MecanumSubsystem implements SubsystemBase {
@@ -65,10 +64,10 @@ public class MecanumSubsystem implements SubsystemBase {
         double rotY = x * Math.sin(-heading) + y * Math.cos(-heading);
         double denominator = Math.max(Math.abs(rotX) + Math.abs(rotY) + Math.abs(theta), 1);
 
-        double leftFrontPower = (rotY - rotX - theta) / denominator;
-        double leftBackPower = (rotY + rotX - theta) / denominator;
-        double rightFrontPower = (rotY + rotX + theta) / denominator;
-        double rightBackPower = (rotY - rotX + theta) / denominator;
+        double leftFrontPower = (rotY + rotX + theta) / denominator;
+        double leftBackPower = (rotY - rotX + theta) / denominator;
+        double rightFrontPower = (rotY - rotX - theta) / denominator;
+        double rightBackPower = (rotY + rotX - theta) / denominator;
 
         if(gamepad.right_trigger >= MecanumConstants.slowModeTrigger) {
             leftFront.setPower(leftFrontPower * MecanumConstants.slowModeScaler);

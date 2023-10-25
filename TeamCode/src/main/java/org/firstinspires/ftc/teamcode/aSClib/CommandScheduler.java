@@ -1,17 +1,14 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.aSClib;
 
-import org.firstinspires.ftc.teamcode.Commands.CommandBase;
-import org.firstinspires.ftc.teamcode.Subsystems.SubsystemBase;
-import org.firstinspires.ftc.teamcode.ControllerAddons;
-import org.firstinspires.ftc.teamcode.ControllerBinding;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 
 public class CommandScheduler {
     private HashMap<List<SubsystemBase>, CommandBase> commands = new HashMap<List<SubsystemBase>, CommandBase>();
-    private List<CommandBase> defaultCommands = null;
-    private List<SubsystemBase> currentRequirements;
-    private List<SubsystemBase> subsystems;
+    private List<CommandBase> defaultCommands = new ArrayList<CommandBase>();
+    private List<SubsystemBase> currentRequirements = new ArrayList<SubsystemBase>();
+    private List<SubsystemBase> subsystems = new ArrayList<SubsystemBase>();
 
     public CommandScheduler addSubsystem(SubsystemBase subsystem) {
         subsystems.add(subsystem);

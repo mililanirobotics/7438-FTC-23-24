@@ -1,18 +1,10 @@
-package org.firstinspires.ftc.teamcode.Commands;
+package org.firstinspires.ftc.teamcode.aSClib;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import org.firstinspires.ftc.teamcode.Subsystems.SubsystemBase;
-
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
 public interface CommandBase {
-
-    List<SubsystemBase> requirements = null;
+    List<SubsystemBase> requirements = new ArrayList<SubsystemBase>();
 
     default void initialize() {}
 

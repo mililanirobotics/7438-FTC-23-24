@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.teamcode.Subsystems;
+package org.firstinspires.ftc.teamcode.aSClib;
 
-import org.firstinspires.ftc.teamcode.Commands.CommandBase;
 import java.util.List;
+import java.util.ArrayList;
 
 public interface SubsystemBase {
-    List<CommandBase> defaultCommands = null;
+    List<CommandBase> defaultCommands = new ArrayList<CommandBase>();
 
     default void setDefaultCommand(CommandBase defaultCommand) {
         defaultCommands.add(defaultCommand);

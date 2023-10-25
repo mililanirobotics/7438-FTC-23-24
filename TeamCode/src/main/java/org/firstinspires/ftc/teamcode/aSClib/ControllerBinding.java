@@ -1,11 +1,6 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.aSClib;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
-
-import org.firstinspires.ftc.teamcode.Constants;
-import org.firstinspires.ftc.teamcode.ControllerAddons;
-import org.firstinspires.ftc.teamcode.Commands.CommandBase;
-import org.firstinspires.ftc.teamcode.CommandScheduler;
 
 public class ControllerBinding {
     private CommandScheduler commandScheduler;

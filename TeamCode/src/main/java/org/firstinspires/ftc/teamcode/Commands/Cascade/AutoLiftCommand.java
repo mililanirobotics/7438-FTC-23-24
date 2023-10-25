@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.Commands.Cascade;
 
-import org.firstinspires.ftc.teamcode.Commands.CommandBase;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.Subsystems.CascadeSubsystem;
 import org.firstinspires.ftc.teamcode.PIDController;
+import org.firstinspires.ftc.teamcode.aSClib.CommandBase;
 
 public class AutoLiftCommand implements CommandBase {
     private CascadeSubsystem s_CascadeSubsystem;

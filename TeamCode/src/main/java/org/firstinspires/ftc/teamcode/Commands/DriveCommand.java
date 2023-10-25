@@ -1,8 +1,9 @@
 package org.firstinspires.ftc.teamcode.Commands;
 
-import org.firstinspires.ftc.teamcode.Commands.CommandBase;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.teamcode.Subsystems.MecanumSubsystem;
+import org.firstinspires.ftc.teamcode.aSClib.CommandBase;
+import org.firstinspires.ftc.teamcode.aSClib.ControllerAddons;
 
 public class DriveCommand implements CommandBase {
     private Gamepad gamepad;

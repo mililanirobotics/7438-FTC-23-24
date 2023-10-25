@@ -2,8 +2,8 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.teamcode.Constants.IntakeConstants;
+import org.firstinspires.ftc.teamcode.aSClib.SubsystemBase;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
