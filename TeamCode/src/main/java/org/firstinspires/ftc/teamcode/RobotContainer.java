@@ -35,17 +35,17 @@ public class RobotContainer {
     private Gamepad gamepad1;
     private Gamepad gamepad2;
 
-    private final MecanumSubsystem mecanumSubsystem = new MecanumSubsystem(opMode, telemetry);
-    private final CascadeSubsystem cascadeSubsystem = new CascadeSubsystem(opMode);
-    private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem(opMode);
-    private final AprilTagSubsystem aprilTagSubsystem = new AprilTagSubsystem(opMode, telemetry);
+//    private final MecanumSubsystem mecanumSubsystem = new MecanumSubsystem(opMode, telemetry);
+//    private final CascadeSubsystem cascadeSubsystem = new CascadeSubsystem(opMode);
+//    private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem(opMode, telemetry);
+//    private final AprilTagSubsystem aprilTagSubsystem = new AprilTagSubsystem(opMode, telemetry);
     private final TensorflowSubsystem tensorflowSubsystem = new TensorflowSubsystem(opMode, telemetry);
 
     private final CommandScheduler scheduler = new CommandScheduler(
-            mecanumSubsystem,
-            cascadeSubsystem,
-            intakeSubsystem,
-            aprilTagSubsystem,
+//            mecanumSubsystem,
+//            cascadeSubsystem,
+//            intakeSubsystem,
+//            aprilTagSubsystem,
             tensorflowSubsystem
     );
 
@@ -54,10 +54,10 @@ public class RobotContainer {
         this.telemetry = telemetry;
         gamepad1 = opMode.gamepad1;
         gamepad2 = opMode.gamepad2;
-
-        mecanumSubsystem.setDefaultCommand(scheduler, new DriveCommand(gamepad1, telemetry, mecanumSubsystem));
-        cascadeSubsystem.setDefaultCommand(scheduler, new LiftCommand(gamepad2, cascadeSubsystem));
-        intakeSubsystem.setDefaultCommand(scheduler, new IntakeCommand(gamepad2, intakeSubsystem));
+//
+//        mecanumSubsystem.setDefaultCommand(scheduler, new DriveCommand(gamepad1, telemetry, mecanumSubsystem));
+//        cascadeSubsystem.setDefaultCommand(scheduler, new LiftCommand(gamepad2, cascadeSubsystem));
+//        intakeSubsystem.setDefaultCommand(scheduler, new IntakeCommand(gamepad2, intakeSubsystem));
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -73,96 +73,96 @@ public class RobotContainer {
 //        );
     }
 
-    public CommandBase redRightPath() {
-        switch(tensorflowSubsystem.objectPosition()) {
-            case NONE:
-                return new SequentialCommandGroup(
-                        new MoveDistanceCommand(mecanumSubsystem, 5),
-                        new StrafeDistanceCommand(mecanumSubsystem, 44)
-                );
-            case LEFT:
-                return new SequentialCommandGroup(
-                        new MoveDistanceCommand(mecanumSubsystem, 10),
-                        new GyroTurnCommand(mecanumSubsystem, 90),
-                        new MoveDistanceCommand(mecanumSubsystem, 50)
-                );
-            case CENTER:
-                return new SequentialCommandGroup(
-                        new MoveDistanceCommand(mecanumSubsystem, 1)
-                );
-            case RIGHT:
-                return new SequentialCommandGroup(
-                        new MoveDistanceCommand(mecanumSubsystem, 12)
-                );
-        }
-        return null;
-    }
-
-    public CommandBase redLeftPath() {
-        switch(tensorflowSubsystem.objectPosition()) {
-            case NONE:
-                break;
-            case LEFT:
-                return new SequentialCommandGroup(
-                        new MoveDistanceCommand(mecanumSubsystem, 10),
-                        new GyroTurnCommand(mecanumSubsystem, 90),
-                        new MoveDistanceCommand(mecanumSubsystem, 10)
-                );
-            case CENTER:
-                return new SequentialCommandGroup(
-                        new MoveDistanceCommand(mecanumSubsystem, 1)
-                );
-            case RIGHT:
-                return new SequentialCommandGroup(
-                        new MoveDistanceCommand(mecanumSubsystem, 12)
-                );
-        }
-        return null;
-    }
-
-    public CommandBase blueRightPath() {
-        switch(tensorflowSubsystem.objectPosition()) {
-            case NONE:
-                break;
-            case LEFT:
-                return new SequentialCommandGroup(
-                        new MoveDistanceCommand(mecanumSubsystem, 10),
-                        new GyroTurnCommand(mecanumSubsystem, 90),
-                        new MoveDistanceCommand(mecanumSubsystem, 20)
-                );
-            case CENTER:
-                return new SequentialCommandGroup(
-                        new MoveDistanceCommand(mecanumSubsystem, 1)
-                );
-            case RIGHT:
-                return new SequentialCommandGroup(
-                        new MoveDistanceCommand(mecanumSubsystem, 12)
-                );
-        }
-        return null;
-    }
-
-    public CommandBase blueLeftPath() {
-        switch(tensorflowSubsystem.objectPosition()) {
-            case NONE:
-                break;
-            case LEFT:
-                return new SequentialCommandGroup(
-                        new MoveDistanceCommand(mecanumSubsystem, 10),
-                        new GyroTurnCommand(mecanumSubsystem, 90),
-                        new MoveDistanceCommand(mecanumSubsystem, 4)
-                );
-            case CENTER:
-                return new SequentialCommandGroup(
-                        new MoveDistanceCommand(mecanumSubsystem, 1)
-                );
-            case RIGHT:
-                return new SequentialCommandGroup(
-                        new MoveDistanceCommand(mecanumSubsystem, 12)
-                );
-        }
-        return null;
-    }
+//    public CommandBase redRightPath() {
+//        switch(tensorflowSubsystem.objectPosition()) {
+//            case NONE:
+//                return new SequentialCommandGroup(
+//                        new MoveDistanceCommand(mecanumSubsystem, 5, telemetry),
+//                        new StrafeDistanceCommand(mecanumSubsystem, 44)
+//                );
+//            case LEFT:
+//                return new SequentialCommandGroup(
+//                        new MoveDistanceCommand(mecanumSubsystem, 10, telemetry),
+//                        new GyroTurnCommand(mecanumSubsystem, 90, telemetry),
+//                        new MoveDistanceCommand(mecanumSubsystem, 50, telemetry)
+//                );
+//            case CENTER:
+//                return new SequentialCommandGroup(
+//                        new MoveDistanceCommand(mecanumSubsystem, 1, telemetry)
+//                );
+//            case RIGHT:
+//                return new SequentialCommandGroup(
+//                        new MoveDistanceCommand(mecanumSubsystem, 12, telemetry)
+//                );
+//        }
+//        return null;
+//    }
+//
+//    public CommandBase redLeftPath() {
+//        switch(tensorflowSubsystem.objectPosition()) {
+//            case NONE:
+//                break;
+//            case LEFT:
+//                return new SequentialCommandGroup(
+//                        new MoveDistanceCommand(mecanumSubsystem, 10, telemetry),
+//                        new GyroTurnCommand(mecanumSubsystem, 90, telemetry),
+//                        new MoveDistanceCommand(mecanumSubsystem, 10, telemetry)
+//                );
+//            case CENTER:
+//                return new SequentialCommandGroup(
+//                        new MoveDistanceCommand(mecanumSubsystem, 1, telemetry)
+//                );
+//            case RIGHT:
+//                return new SequentialCommandGroup(
+//                        new MoveDistanceCommand(mecanumSubsystem, 12, telemetry)
+//                );
+//        }
+//        return null;
+//    }
+//
+//    public CommandBase blueRightPath() {
+//        switch(tensorflowSubsystem.objectPosition()) {
+//            case NONE:
+//                break;
+//            case LEFT:
+//                return new SequentialCommandGroup(
+//                        new MoveDistanceCommand(mecanumSubsystem, 10, telemetry),
+//                        new GyroTurnCommand(mecanumSubsystem, 90, telemetry),
+//                        new MoveDistanceCommand(mecanumSubsystem, 20, telemetry)
+//                );
+//            case CENTER:
+//                return new SequentialCommandGroup(
+//                        new MoveDistanceCommand(mecanumSubsystem, 1, telemetry)
+//                );
+//            case RIGHT:
+//                return new SequentialCommandGroup(
+//                        new MoveDistanceCommand(mecanumSubsystem, 12, telemetry)
+//                );
+//        }
+//        return null;
+//    }
+//
+//    public CommandBase blueLeftPath() {
+//        switch(tensorflowSubsystem.objectPosition()) {
+//            case NONE:
+//                break;
+//            case LEFT:
+//                return new SequentialCommandGroup(
+//                        new MoveDistanceCommand(mecanumSubsystem, 10, telemetry),
+//                        new GyroTurnCommand(mecanumSubsystem, 90, telemetry),
+//                        new MoveDistanceCommand(mecanumSubsystem, 4, telemetry)
+//                );
+//            case CENTER:
+//                return new SequentialCommandGroup(
+//                        new MoveDistanceCommand(mecanumSubsystem, 1, telemetry)
+//                );
+//            case RIGHT:
+//                return new SequentialCommandGroup(
+//                        new MoveDistanceCommand(mecanumSubsystem, 12, telemetry)
+//                );
+//        }
+//        return null;
+//    }
 
     public void shutdown() {
         scheduler.shutdown();

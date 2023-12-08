@@ -1,172 +1,136 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
-import org.firstinspires.ftc.teamcode.aSClib.SubsystemBase;
-
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.Constants.MecanumConstants;
+import org.firstinspires.ftc.teamcode.aSClib.SubsystemBase;
+
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 
 public class MecanumSubsystem implements SubsystemBase {
-    private DcMotorEx leftFrontDrive;
-    private DcMotorEx rightFrontDrive;
-    private DcMotorEx leftBackDrive;
-    private DcMotorEx rightBackDrive;
+    //drive motors
+    private final DcMotor leftFront;
+    private final DcMotor leftBack;
+    private final DcMotor rightFront;
+    private final DcMotor rightBack;
 
+    //control hub gyro
     private BNO055IMU imu;
     private final BNO055IMU.Parameters parameters;
+    private Telemetry telemetry;
 
-    private boolean slowModeOn;
+    public MecanumSubsystem(OpMode opMode, Telemetry telemetry) {
+        this.telemetry = telemetry;
+        //initializing motors
+        leftFront = opMode.hardwareMap.get(DcMotor.class, "leftFront");
+        leftBack = opMode.hardwareMap.get(DcMotor.class, "leftBack");
+        rightFront = opMode.hardwareMap.get(DcMotor.class, "rightFront");
+        rightBack = opMode.hardwareMap.get(DcMotor.class, "rightBack");
 
-    public MecanumSubsystem(HardwareMap hwMap, Telemetry telemetry) {
-        //Initializing Motors
-        leftFrontDrive = hwMap.get(DcMotorEx.class, "leftFrontDrive");
-        rightFrontDrive = hwMap.get(DcMotorEx.class, "rightFrontDrive");
-        leftBackDrive = hwMap.get(DcMotorEx.class, "leftBackDrive");
-        rightBackDrive = hwMap.get(DcMotorEx.class, "rightBackDrive");
+        leftFront.setDirection(MecanumConstants.leftFrontReverse);
+        leftBack.setDirection(MecanumConstants.leftBackReverse);
+        rightFront.setDirection(MecanumConstants.rightFrontReverse);
+        rightBack.setDirection(MecanumConstants.rightBackReverse);
 
-        leftFrontDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightFrontDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        leftFrontDrive.setDirection(Constants.MecanumConstants.leftFrontReverse);
-        leftBackDrive.setDirection(Constants.MecanumConstants.leftBackReverse);
-        rightFrontDrive.setDirection(Constants.MecanumConstants.rightFrontReverse);
-        rightBackDrive.setDirection(Constants.MecanumConstants.rightBackReverse);
-
-        imu = hwMap.get(BNO055IMU.class, "imu");
+        //initializing gyro
+        imu = opMode.hardwareMap.get(BNO055IMU.class, "imu");
         parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
         imu.initialize(parameters);
 
-        telemetry.addData("Status", "Mecanum Drive Initializes");
+        //feedback stating the drive is initialized
+        telemetry.addData("Status", "Mecanum drive and gyro initialized");
         telemetry.update();
     }
 
-    // Control method for mecanum drive during Tele-Op
-    public void operate(Gamepad gamepad) {
+    public void drive(Gamepad gamepad) {
         double y = -gamepad.left_stick_y;
         double x = gamepad.left_stick_x;
-        double rx = gamepad.right_stick_x;
-        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+        double theta =gamepad.right_stick_x;
 
-        if (gamepad.left_bumper && !slowModeOn) {
-            slowModeOn = true;
-        }
-        else if (gamepad.left_bumper && slowModeOn){
-            slowModeOn = false;
-        }
+        double heading = imu.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.RADIANS).thirdAngle;
 
-        if (slowModeOn) {
-            leftFrontDrive.setPower((y + x + rx) / denominator * 0.5);
-            rightFrontDrive.setPower((y - x - rx) / denominator * 0.5);
-            leftBackDrive.setPower((y - x + rx) / denominator * 0.5);
-            rightBackDrive.setPower((y + x - rx) / denominator * 0.5);
+        double rotX = x * Math.cos(-heading) - y * Math.sin(-heading);
+        double rotY = x * Math.sin(-heading) + y * Math.cos(-heading);
+        double denominator = Math.max(Math.abs(rotX) + Math.abs(rotY) + Math.abs(theta), 1);
+
+        double leftFrontPower = (rotY + rotX + theta) / denominator;
+        double leftBackPower = (rotY - rotX + theta) / denominator;
+        double rightFrontPower = (rotY - rotX - theta) / denominator;
+        double rightBackPower = (rotY + rotX - theta) / denominator;
+
+        if(gamepad.right_trigger >= MecanumConstants.slowModeTrigger) {
+            leftFront.setPower(leftFrontPower * MecanumConstants.slowModeScaler);
+            leftBack.setPower(leftBackPower * MecanumConstants.slowModeScaler);
+            rightFront.setPower(rightFrontPower * MecanumConstants.slowModeScaler);
+            rightBack.setPower(rightBackPower * MecanumConstants.slowModeScaler);
         }
         else {
-            leftFrontDrive.setPower((y + x + rx) / denominator);
-            rightFrontDrive.setPower((y - x - rx) / denominator);
-            leftBackDrive.setPower((y - x + rx) / denominator);
-            rightBackDrive.setPower((y + x - rx) / denominator);
-        }
-    }
-
-    // Returns the current encoder count reading.
-    public double[] encoderReading () {
-        double[] encoderReading = new double[4];
-
-        encoderReading[0] = leftFrontDrive.getCurrentPosition();
-        encoderReading[1] = rightFrontDrive.getCurrentPosition();
-        encoderReading[2] = leftBackDrive.getCurrentPosition();
-        encoderReading[3] = rightBackDrive.getCurrentPosition();
-
-        return encoderReading;
-    }
-
-    // Sets the counts target for encoders including directional targets.
-    public void setEncoderTarget (int targetCounts, String direction) {
-        leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        if (direction.equals("Forwards")) {
-            leftFrontDrive.setTargetPosition(targetCounts);
-            rightFrontDrive.setTargetPosition(targetCounts);
-            leftBackDrive.setTargetPosition(targetCounts);
-            rightBackDrive.setTargetPosition(targetCounts);
-        }
-        else if (direction.equals("Backwards")) {
-            leftFrontDrive.setTargetPosition(-targetCounts);
-            rightFrontDrive.setTargetPosition(-targetCounts);
-            leftBackDrive.setTargetPosition(-targetCounts);
-            rightBackDrive.setTargetPosition(-targetCounts);
-        }
-        else if (direction.equals("Left")) {
-            leftFrontDrive.setTargetPosition(-targetCounts);
-            rightFrontDrive.setTargetPosition(targetCounts);
-            leftBackDrive.setTargetPosition(targetCounts);
-            rightBackDrive.setTargetPosition(-targetCounts);
-        }
-        else if (direction.equals("Right")) {
-            leftFrontDrive.setTargetPosition(targetCounts);
-            rightFrontDrive.setTargetPosition(-targetCounts);
-            leftBackDrive.setTargetPosition(-targetCounts);
-            rightBackDrive.setTargetPosition(targetCounts);
+            leftFront.setPower(leftFrontPower);
+            leftBack.setPower(leftBackPower);
+            rightFront.setPower(rightFrontPower);
+            rightBack.setPower(rightBackPower);
         }
 
-        leftFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        telemetry.addData("Left Front Power: ", leftFrontPower);
+        telemetry.addData("Left Back Power: ", leftBackPower);
+        telemetry.addData("Right Front Power: ", rightFrontPower);
+        telemetry.addData("Right Back Power: ", rightBackPower);
+        telemetry.addData("Robot Heading: ", heading);
+        telemetry.addData("Y-axis", rotY);
+        telemetry.update();
     }
 
-    // Sets the drive motors to a given power
-    public void setPower (double leftPower, double rightPower) {
-        leftFrontDrive.setPower(leftPower);
-        rightFrontDrive.setPower(rightPower);
-        leftBackDrive.setPower(leftPower);
-        rightBackDrive.setPower(rightPower);
-    }
-
-    public void autoStrafePower (double leftPower, double rightPower) {
-        leftFrontDrive.setPower(-leftPower);
-        rightFrontDrive.setPower(rightPower);
-        leftBackDrive.setPower(leftPower);
-        rightBackDrive.setPower(-rightPower);
-    }
-
-    // Returns the Z-axis rotational angle
     public double getOrientation() {
         return imu.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.RADIANS).thirdAngle;
     }
 
-    // A check statement for waiting until the drive motors stop moving.
-    public boolean isBusyCheck() {
-        boolean isBusy = true;
-        if (leftFrontDrive.isBusy() == true || rightFrontDrive.isBusy() == true || leftBackDrive.isBusy() == true || rightBackDrive.isBusy() == true) {
-
-        }
-        else {
-            isBusy = false;
-        }
-        return isBusy;
+    public double getCurrentPosition() {
+        return leftFront.getCurrentPosition() * MecanumConstants.ticksPerRev * MecanumConstants.wheelCircumference;
     }
 
-    // Sets all motor power to zero
+    public void leftPower(double frontPower, double backPower) {
+        leftFront.setPower(frontPower);
+        leftBack.setPower(backPower);
+    }
+
+    public void rightPower(double frontPower, double backPower) {
+        rightFront.setPower(frontPower);
+        rightBack.setPower(backPower);
+    }
+
+    public void setPower(double leftPower, double rightPower) {
+        leftFront.setPower(leftPower);
+        leftBack.setPower(leftPower);
+        rightFront.setPower(rightPower);
+        rightBack.setPower(rightPower);
+    }
+
+    public void strafePower(double leftPower, double rightPower) {
+        leftFront.setPower(leftPower);
+        leftBack.setPower(-leftPower);
+        rightFront.setPower(-rightPower);
+        rightBack.setPower(rightPower);
+    }
+
+    @Override
     public void shutdown() {
-        leftFrontDrive.setPower(0);
-        rightFrontDrive.setPower(0);
-        leftBackDrive.setPower(0);
-        rightBackDrive.setPower(0);
+        leftFront.setPower(0);
+        leftBack.setPower(0);
+        rightFront.setPower(0);
+        rightBack.setPower(0);
     }
+
+    @Override
+    public void periodic() {}
 }

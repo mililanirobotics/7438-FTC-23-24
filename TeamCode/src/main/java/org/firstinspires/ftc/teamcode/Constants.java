@@ -32,9 +32,8 @@ public final class Constants {
         public static double slowModeTrigger = 0.5;
         public static double slowModeScaler = 0.5;
 
-        public static double ticksPerRev = 0;
-        public static double wheelCircumference = 0;
-        public static double gearRatio = 0;
+        public static double ticksPerRev = 537.6;
+        public static double wheelCircumference = 3 * Math.PI;
 
         public static DcMotorSimple.Direction leftFrontReverse = DcMotorSimple.Direction.FORWARD;
         public static DcMotorSimple.Direction leftBackReverse = DcMotorSimple.Direction.REVERSE;
