@@ -10,7 +10,7 @@ public interface CommandBase {
 
     default void execute() {}
 
-    default void end(boolean interrupted) {}
+    default void end() {}
 
     default boolean isFinished() {
         return false;
@@ -18,7 +18,7 @@ public interface CommandBase {
 
     default void disabled() {}
 
-    default void setRequirement(SubsystemBase subsystem) {
+    default void addRequirement(SubsystemBase subsystem) {
         requirements.add(subsystem);
     }
 
@@ -27,10 +27,11 @@ public interface CommandBase {
     }
 
     default void run() {
-        initialize();
         if (!isFinished()) {
             execute();
         }
-//        end(false);
+        if (isFinished()) {
+            end();
+        }
     }
 }

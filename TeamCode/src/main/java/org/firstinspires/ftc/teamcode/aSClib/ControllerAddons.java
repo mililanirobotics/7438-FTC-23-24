@@ -7,8 +7,7 @@ import java.util.HashMap;
 public class ControllerAddons {
 
     private HashMap<Integer, Boolean> ButtonValues = new HashMap<Integer, Boolean>();
-    private HashMap<Integer, Float> JoystickValues = new HashMap<Integer, Float>();
-    private HashMap<Integer, Float> TriggerValues = new HashMap<Integer, Float>();
+    private HashMap<Integer, Float> AnalogValues = new HashMap<Integer, Float>();
 
     public void updateValues(Gamepad gamepad) {
         ButtonValues.put(0, gamepad.a);
@@ -26,13 +25,12 @@ public class ControllerAddons {
         ButtonValues.put(15, gamepad.right_bumper);
         ButtonValues.put(16, gamepad.right_stick_button);
 
-        JoystickValues.put(12, gamepad.left_stick_x);
-        JoystickValues.put(13, gamepad.left_stick_y);
-        JoystickValues.put(17, gamepad.right_stick_x);
-        JoystickValues.put(18, gamepad.right_stick_y);
-
-        TriggerValues.put(14, gamepad.left_trigger);
-        TriggerValues.put(19, gamepad.right_trigger);
+        AnalogValues.put(12, gamepad.left_stick_x);
+        AnalogValues.put(13, gamepad.left_stick_y);
+        AnalogValues.put(17, gamepad.right_stick_x);
+        AnalogValues.put(18, gamepad.right_stick_y);
+        AnalogValues.put(14, gamepad.left_trigger);
+        AnalogValues.put(19, gamepad.right_trigger);
     }
 
     public boolean getButton(Gamepad gamepad, int buttonKey) {
@@ -45,21 +43,11 @@ public class ControllerAddons {
         return false;
     }
 
-    public float getJoystick(Gamepad gamepad, int joystickKey) {
+    public float getAnalog(Gamepad gamepad, int analogKey) {
         updateValues(gamepad);
-        for (int i : JoystickValues.keySet()) {
-            if (i == joystickKey) {
-                return JoystickValues.get(i);
-            }
-        }
-        return 0;
-    }
-
-    public float getTrigger(Gamepad gamepad, int triggerKey) {
-        updateValues(gamepad);
-        for (int i : TriggerValues.keySet()) {
-            if (i == triggerKey) {
-                return TriggerValues.get(i);
+        for (int i : AnalogValues.keySet()) {
+            if (i == analogKey) {
+                return AnalogValues.get(i);
             }
         }
         return 0;

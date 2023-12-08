@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.CascadeSubsystem;
 import org.firstinspires.ftc.teamcode.PIDController;
 import org.firstinspires.ftc.teamcode.aSClib.CommandBase;
 
-public class AutoLiftCommand implements CommandBase {
+public class setLiftDownCommand implements CommandBase {
     private CascadeSubsystem s_CascadeSubsystem;
     private PIDController pidController;
     private Gamepad gamepad;
@@ -15,7 +15,7 @@ public class AutoLiftCommand implements CommandBase {
     private double desiredPosition;
     private double error;
 
-    public AutoLiftCommand(Gamepad gamepad, CascadeSubsystem s_CascadeSubsystem) {
+    public setLiftDownCommand(Gamepad gamepad, CascadeSubsystem s_CascadeSubsystem) {
         this.s_CascadeSubsystem = s_CascadeSubsystem;
         this.gamepad = gamepad;
 
@@ -29,12 +29,12 @@ public class AutoLiftCommand implements CommandBase {
 
     @Override
     public void initialize() {
-        error = CascadeConstants.deliveryPosition - s_CascadeSubsystem.getLiftPosition();
+        error = CascadeConstants.stowPosition - s_CascadeSubsystem.getLiftPosition();
     }
 
     @Override
     public void execute() {
-        error = CascadeConstants.deliveryPosition - s_CascadeSubsystem.getLiftPosition();
+        error = CascadeConstants.stowPosition - s_CascadeSubsystem.getLiftPosition();
         if (error > 0) {
             s_CascadeSubsystem.setLift(1);
         }

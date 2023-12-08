@@ -32,6 +32,10 @@ public final class Constants {
         public static double slowModeTrigger = 0.5;
         public static double slowModeScaler = 0.5;
 
+        public static double ticksPerRev = 0;
+        public static double wheelCircumference = 0;
+        public static double gearRatio = 0;
+
         public static DcMotorSimple.Direction leftFrontReverse = DcMotorSimple.Direction.FORWARD;
         public static DcMotorSimple.Direction leftBackReverse = DcMotorSimple.Direction.REVERSE;
         public static DcMotorSimple.Direction rightFrontReverse = DcMotorSimple.Direction.FORWARD;
@@ -44,8 +48,13 @@ public final class Constants {
         public static double kILController = 0;
     }
 
-    public static class VisionSubsystem {
-
+    public static class VisionConstants {
+        public static enum objPos {
+            LEFT,
+            RIGHT,
+            CENTER,
+            NONE
+        }
     }
 
     public static class IntakeConstants {
@@ -61,9 +70,9 @@ public final class Constants {
 
         public static int ticksPerRev = 23;
 
-        public static double stowPosition = 0;
-        public static double deliveryPosition = 0;
-        public static double liftTolerance = 0;
+        public static double stowPosition = 0.1;
+        public static double deliveryPosition = 5;
+        public static double liftTolerance = 0.3;
 
         public static double kPController = 0;
         public static double kIController = 0;

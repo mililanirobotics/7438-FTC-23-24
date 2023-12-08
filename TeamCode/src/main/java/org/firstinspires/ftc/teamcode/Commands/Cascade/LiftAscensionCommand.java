@@ -22,6 +22,7 @@ public class LiftAscensionCommand implements CommandBase {
     public void execute() {
         if (controllerAddons.getButton(gamepad, OperatorConstants.kLEFTBUMPER)) {
             s_CascadeSubsystem.setLift(1);
+            boolean bob = gamepad.left_bumper;
         }
         else {
             s_CascadeSubsystem.setLift(0);
@@ -29,7 +30,7 @@ public class LiftAscensionCommand implements CommandBase {
     }
 
     @Override
-    public void end(boolean interrupted) {
+    public void end() {
         s_CascadeSubsystem.shutdown();
     }
 

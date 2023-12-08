@@ -10,6 +10,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 import org.firstinspires.ftc.teamcode.aSClib.SubsystemBase;
+import org.firstinspires.ftc.teamcode.Constants.VisionConstants;
 
 public class TensorflowSubsystem implements SubsystemBase {
     private TfodProcessor tfod;
@@ -66,6 +67,38 @@ public class TensorflowSubsystem implements SubsystemBase {
 
     public double getConfidence() {
         return getRecognition().getConfidence();
+    }
+
+    public boolean isObj() {
+        return !(getRecognition() == null);
+    }
+
+    public boolean isObjRight() {
+        return getXPosition() > 10;
+    }
+
+    public boolean isObjCenter() {
+        return getXPosition() > 0;
+    }
+
+    public boolean isObjLeft() {
+        return getXPosition() < -10;
+    }
+
+    public VisionConstants.objPos objectPosition() {
+        if (!isObj()) {
+            return VisionConstants.objPos.NONE;
+        }
+        else if(isObjLeft()) {
+            return VisionConstants.objPos.LEFT;
+        }
+        else if(isObjRight()) {
+            return VisionConstants.objPos.RIGHT;
+        }
+        else if(isObjCenter()) {
+            return VisionConstants.objPos.CENTER;
+        }
+        return null;
     }
 
     public void updateRecognition() {
